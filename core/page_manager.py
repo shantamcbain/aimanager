@@ -34,6 +34,30 @@ class PageManager:
         with open(self.json_file_path, 'w') as file:
             json.dump(self.pages, file, indent=4)
 
+    def add_content_to_page(self, page_id: str, content: str) -> bool:
+
+        """
+
+        Add content to an existing page.
+
+
+        :param page_id: ID of the page to add content to.
+
+        :param content: New content to add.
+
+        :return: True if content was added, False otherwise.
+
+        """
+
+        if page_id in self.pages:
+            self.pages[page_id]["content"] += content
+
+            self.save_pages()
+
+            return True
+
+        return False
+
     def add_page(self, title: str, content: str) -> str:
         """
         Add a new page to the JSON file.

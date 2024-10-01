@@ -58,6 +58,9 @@ user_manager = UserManager()
 
 
 # In user_manager.py
+
 def current_user():
-         debug_print(f"Debug: Username is {user_manager.current_user.username}")
-         return user_manager.current_user  # Return the User object
+    debug_print(f"Debug: Current is {user_manager.current_user.username}")
+
+    # Return the User object instead of the username
+    return user_manager.current_user

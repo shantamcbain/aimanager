@@ -11,7 +11,7 @@ from utils.debug_utils import debug_print
 from utils.server_thread import FlaskServerThread
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
-debug_print(f"Debug: Username is {current_user().username}")
+#debug_print(f"Debug: Username is {username}")
 
 class FileChangeHandler(FileSystemEventHandler):
     def __init__(self, callback):
@@ -60,6 +60,8 @@ class DesktopUI(QMainWindow):
 
         # Welcome label
         label = QLabel(f"Welcome, {current_user().username}")
+        label = QLabel(f"Welcome, {current_user().username}")
+
         self.main_layout.addWidget(label)
 
         # Status label
