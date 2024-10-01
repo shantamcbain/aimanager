@@ -1,4 +1,4 @@
 <nav>
-   <a href="{{ url_for('index') }}">Home</a>  <li><a href="{{ url_for('dynamic_content_page', page_path='about') }}">About</a></li>
+   <a href="{{ url_for('index') }}">Home</a>  <a href="{{ url_for('dynamic_content_page', page_path='about') }}">About</a>
 </nav>
 <h1>Welcome, {{ current_user.username if current_user.is_authenticated else 'Guest' }}!</h1>
