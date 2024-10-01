@@ -1,0 +1,10 @@
+{
+    "index": {
+        "title": "Home",
+        "content": "<h1>Welcome to Home</h1><p>Dynamic content here...</p>"
+    },
+    "about": {
+        "title": "About Us",
+        "content": "<h1>About Us</h1><p>More dynamic content...</p>"
+    }
+}
