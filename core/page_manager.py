@@ -2,7 +2,6 @@ import json
 from flask import current_app
 from typing import Dict, Any, List
 
-
 class PageManager:
     def __init__(self):
         """
@@ -14,7 +13,6 @@ class PageManager:
     def load_pages(self) -> Dict[str, Any]:
         """
         Load all pages from the JSON file.
-
         :return: Dictionary of pages where keys are page IDs and values are page data.
         """
         try:
@@ -35,39 +33,39 @@ class PageManager:
             json.dump(self.pages, file, indent=4)
 
     def add_content_to_page(self, page_id: str, content: str) -> bool:
-
         """
-
         Add content to an existing page.
-
-
         :param page_id: ID of the page to add content to.
-
         :param content: New content to add.
-
         :return: True if content was added, False otherwise.
-
         """
-
         if page_id in self.pages:
-            self.pages[page_id]["content"] += content
-
+            self.pages[page_id]["body"] += content
             self.save_pages()
-
             return True
-
         return False
 
-    def add_page(self, title: str, content: str) -> str:
+    def add_page(self, title: str, content: str, **kwargs) -> str:
         """
         Add a new page to the JSON file.
 
         :param title: Title of the page.
         :param content: Content of the page.
+        :param kwargs: Additional fields for the page.
         :return: The ID of the newly created page.
         """
         new_id = self.generate_unique_id()
-        self.pages[new_id] = {"title": title, "content": content}
+        self.pages[new_id] = {
+            "title": title,
+            "body": content,
+            "sitename": kwargs.get("sitename", "Your Site Name"),
+            "lastupdate": kwargs.get("lastupdate", "2024-10-03T10:23:00Z"),
+            "status": kwargs.get("status", "public"),
+            "javascript": kwargs.get("javascript", ""),
+            "menu": kwargs.get("menu", []),
+            "share": kwargs.get("share", "public"),
+            "header": title  # Assuming header is the same as title for now
+        }
         self.save_pages()
         return new_id
 
@@ -84,20 +82,18 @@ class PageManager:
             return True
         return False
 
-    def modify_page(self, page_id: str, title: str = None, content: str = None) -> bool:
+    def modify_page(self, page_id: str, **kwargs) -> bool:
         """
         Modify an existing page.
 
         :param page_id: ID of the page to modify.
-        :param title: New title for the page, if changing.
-        :param content: New content for the page, if changing.
+        :param kwargs: Fields to update for the page.
         :return: True if the page was modified, False if it didn't exist.
         """
         if page_id in self.pages:
-            if title:
-                self.pages[page_id]["title"] = title
-            if content:
-                self.pages[page_id]["content"] = content
+            for key, value in kwargs.items():
+                if key in self.pages[page_id]:
+                    self.pages[page_id][key] = value
             self.save_pages()
             return True
         return False
@@ -128,8 +124,7 @@ class PageManager:
         import uuid
         return str(uuid.uuid4())
 
-
-# Utility functions (could be methods of PageManager or kept as standalone functions)
+# Utility functions
 def get_page_title(page_data: Dict[str, Any]) -> str:
     """
     Extract the title from page data.
@@ -139,7 +134,6 @@ def get_page_title(page_data: Dict[str, Any]) -> str:
     """
     return page_data.get('title', 'Untitled Page')
 
-
 def get_page_content(page_data: Dict[str, Any]) -> str:
     """
     Extract the content from page data.
@@ -147,10 +141,4 @@ def get_page_content(page_data: Dict[str, Any]) -> str:
     :param page_data: Dictionary containing page data.
     :return: Content of the page, or an empty string if not provided.
     """
-    return page_data.get('content', '')
-
-# Usage example:
-# manager = PageManager()
-# page_content = manager.get_page("some_id")
-# title = get_page_title(page_content)
-# content = get_page_content(page_content)
+    return page_data.get('body', '')

@@ -5,4 +5,4 @@
    <a href="{{ url_for('manage_pages') }}">Manage Pages</a>
    {% endif %}
 </nav>
-<h1>Welcome, {{ current_user.username if current_user.is_authenticated else 'Guest' }}!</h1>
+<h1>Welcome to {{ pagedisplayname }}, {{ current_user.username if current_user.is_authenticated else 'Guest' }}!</h1>
