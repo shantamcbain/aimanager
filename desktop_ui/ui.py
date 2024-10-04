@@ -1,5 +1,5 @@
 import os
-
+import logging
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QToolBar
 from PyQt6.QtCore import QUrl
 from PyQt6.QtGui import QAction
@@ -12,6 +12,7 @@ from utils.server_thread import FlaskServerThread
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 #debug_print(f"Debug: Username is {username}")
+logger = logging.getLogger(__name__)
 
 class FileChangeHandler(FileSystemEventHandler):
     def __init__(self, callback):
@@ -22,22 +23,30 @@ class FileChangeHandler(FileSystemEventHandler):
             return
         self.callback(event.src_path)
 
+
 class DesktopUI(QMainWindow):
-    def __init__(self, flask_app, socketio, flask_thread):
+    def __init__(self, flask_app, socketio, flask_thread, watch_path):
         super().__init__()
         self.flask_app = flask_app
         self.socketio = socketio
         self.flask_thread = flask_thread
         self.flask_thread.error.connect(self.show_error)
         self.flask_thread.finished.connect(self.server_finished)
-        
+
         # Setup file observer
         self.observer = Observer()
         self.event_handler = FileChangeHandler(self.refresh_ide)
-        self.observer.schedule(self.event_handler, path='/home/shanta/PycharmProjects/aimanager1', recursive=True)
-        self.observer.start()
-        
+
+        # Check if the path exists before setting up the observer
+        if os.path.exists(watch_path):
+            self.observer.schedule(self.event_handler, path=watch_path, recursive=True)
+            self.observer.start()
+        else:
+            logger.error(f"The directory {watch_path} does not exist.")
+
         self.initUI()
+
+
         
     def closeEvent(self, event):
         self.observer.stop()

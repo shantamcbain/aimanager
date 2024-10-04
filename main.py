@@ -14,6 +14,10 @@ logger = logging.getLogger(__name__)
 
 socketio = SocketIO(flask_app)
 
+# Determine the base directory of your application
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+
 def main():
     debug_print("Checking for web UI mode...")
 
@@ -29,11 +33,15 @@ def main():
             app = QApplication(sys.argv)
             # Create an instance of FlaskServerThread
             flask_thread = FlaskServerThread(flask_app, socketio)
-            desktop_ui = DesktopUI(flask_app, socketio, flask_thread)
+
+            # Pass the correct relative path to aimanager
+            watch_path = os.path.join(BASE_DIR, 'aimanager')
+            desktop_ui = DesktopUI(flask_app, socketio, flask_thread, watch_path)
             desktop_ui.show()
             sys.exit(app.exec())
         except Exception as e:
             logger.error(f"Error in desktop UI: {e}")
+
 
 if __name__ == "__main__":
     main()
