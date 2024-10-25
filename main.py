@@ -1,5 +1,6 @@
 import sys
 import os
+import subprocess
 from PyQt6.QtWidgets import QApplication
 from desktop_ui.ui import DesktopUI
 from web_ui.web_app import app as flask_app
@@ -21,6 +22,9 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 def main():
     debug_print("Checking for web UI mode...")
 
+    # Check and install dependencies
+    install_dependencies()
+
     if len(sys.argv) > 1 and sys.argv[1] == '--web' or os.environ.get('RUN_WEB_UI', 'false').lower() == 'true':
         debug_print("Setting up Web UI...")
         try:
@@ -31,7 +35,6 @@ def main():
         debug_print("Setting up Desktop UI...")
         try:
             app = QApplication(sys.argv)
-            # Create an instance of FlaskServerThread
             flask_thread = FlaskServerThread(flask_app, socketio)
 
             # Pass the correct relative path to aimanager
@@ -43,5 +46,30 @@ def main():
             logger.error(f"Error in desktop UI: {e}")
 
 
+def install_dependencies():
+
+    try:
+
+        with open('requirements.txt', 'r') as file:
+
+            packages = file.read().splitlines()
+
+
+
+        for package in packages:
+
+            try:
+
+                subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
+                print(f"Successfully installed {package}")
+
+            except subprocess.CalledProcessError:
+
+                print(f"Failed to install {package}")
+
+    except FileNotFoundError:
+
+        print("requirements.txt not found.")
 if __name__ == "__main__":
     main()

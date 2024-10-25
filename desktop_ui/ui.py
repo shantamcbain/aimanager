@@ -5,12 +5,12 @@ from PyQt6.QtCore import QUrl
 from PyQt6.QtGui import QAction
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from core.user_manager import user_manager
-from core.user_manager.user_manager import current_user
-from web_ui.web_app import app as flask_app
-from utils.debug_utils import debug_print
-from utils.server_thread import FlaskServerThread
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
+from ..core.user_manager.user_manager import current_user
+from .web_ui.web_app import app as flask_app
+from .utils.debug_utils import debug_print
+from .utils.server_thread import FlaskServerThread
+from .watchdog.observers import Observer
+from .watchdog.events import FileSystemEventHandler
 #debug_print(f"Debug: Username is {username}")
 logger = logging.getLogger(__name__)
 
