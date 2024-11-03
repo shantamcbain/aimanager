@@ -11,7 +11,7 @@ from utils.server_thread import FlaskServerThread
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logging = logging.getlogging(__name__)
 
 socketio = SocketIO(flask_app)
 
@@ -30,7 +30,7 @@ def main():
         try:
             socketio.run(flask_app, debug=True, use_reloader=False, allow_unsafe_werkzeug=True)
         except Exception as e:
-            logger.error(f"Error starting Flask server: {e}")
+            logging.error(f"Error starting Flask server: {e}")
     else:
         debug_print("Setting up Desktop UI...")
         try:
@@ -43,7 +43,7 @@ def main():
             desktop_ui.show()
             sys.exit(app.exec())
         except Exception as e:
-            logger.error(f"Error in desktop UI: {e}")
+            logging.error(f"Error in desktop UI: {e}")
 
 
 def install_dependencies():

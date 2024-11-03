@@ -12,7 +12,7 @@ from .utils.server_thread import FlaskServerThread
 from .watchdog.observers import Observer
 from .watchdog.events import FileSystemEventHandler
 #debug_print(f"Debug: Username is {username}")
-logger = logging.getLogger(__name__)
+logging = logging.getlogging(__name__)
 
 class FileChangeHandler(FileSystemEventHandler):
     def __init__(self, callback):
@@ -42,7 +42,7 @@ class DesktopUI(QMainWindow):
             self.observer.schedule(self.event_handler, path=watch_path, recursive=True)
             self.observer.start()
         else:
-            logger.error(f"The directory {watch_path} does not exist.")
+            logging.error(f"The directory {watch_path} does not exist.")
 
         self.initUI()
 
